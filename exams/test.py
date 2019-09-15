@@ -1,34 +1,44 @@
-import sys
-# in progress
+# -*- coding:utf-8 -*-
+class Solution:
+    def maxLengthOfSubstring(self, string, k):
 
-def fun():
-    n = int(raw_input())
-    s = []
-    for i in range(0, n):
-        str = raw_input()
-        s.append(str)
+        length = len(string)
+        i = 0
+        repeat_array = [1]
+        char_array = [string[0]]
+        while i < length - 1:
+            if string[i] == string[i + 1]:
+                repeat_array[-1] += 1
+            else:
+                char_array.append(string[i + 1])
+                repeat_array.append(1)
+            i += 1
 
-    re1 = True
-    for i in range(0, n - 1):
-        if len(s[i]) > len(s[i + 1]):
-            re1 = False
-            break
+        max_length = 0
+        for i in range(0, len(repeat_array)):
+            j = i
+            dict = {}
+            while j < len(char_array):
+                if char_array[j] not in dict:
+                    dict[char_array[j]] = 1
+                if len(dict) == k:
+                    break
+                j += 1
 
-    re2 = True
-    for i in range(0, n - 1):
-        s1_len = len(s[i])
-        for j in range(0, s1_len):
-            if s[i][j] != s[i + 1][j] and ord(s[i][j]) > ord(s[i + 1][j]):
-                re2 = False
+            while j < len(char_array) and char_array[j] in dict:
+                j += 1
 
-    if re1 and not re2:
-        print 'lexicographically'
-    elif re2 and not re1:
-        print 'lengths'
-    elif re1 and re2:
-        print 'both'
+            temp = sum(repeat_array[i:j])
+            if temp > max_length:
+                max_length = temp
+
+        return max_length
 
 
 if __name__ == '__main__':
-    fun()
+    k = int(raw_input())
+    string = raw_input()
+
+    solu = Solution()
+    print solu.maxLengthOfSubstring(string, k)
 
