@@ -1,13 +1,16 @@
-# -*- coding:utf-8 -*-
-# in progress
-class Solution:
-    # matrix类型为二维列表，需要返回列表
-    def printMatrix(self, matrix):
-        # write code here
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
         if matrix is None:
             return None
 
         row = len(matrix)
+        if row == 0:
+            return []
+
         col = len(matrix[0])
 
         if row == 1:
@@ -23,24 +26,23 @@ class Solution:
         left = 0
         right = col - 1
 
-        i = top
-        j = left
         while left <= right and top <= bottom:
             i = top
-            for j in range(left, right):
+            for j in range(left, right + 1):
                 ans.append(matrix[i][j])
 
             j = right
-            for i in range(top, bottom):
+            for i in range(top + 1, bottom + 1):
                 ans.append(matrix[i][j])
 
-            i = bottom
-            for j in range(right, left, -1):
-                ans.append(matrix[i][j])
+            if top < bottom and left < right:
+                i = bottom
+                for j in range(right - 1, left, -1):
+                    ans.append(matrix[i][j])
 
-            j = left
-            for i in range(bottom, top, -1):
-                ans.append(matrix[i][j])
+                j = left
+                for i in range(bottom, top, -1):
+                    ans.append(matrix[i][j])
             left += 1
             right -= 1
             top += 1
@@ -50,8 +52,3 @@ class Solution:
             ans.append(matrix[top - 1][left - 1])
 
         return ans
-
-
-if __name__ == '__main__':
-    solu = Solution()
-    print solu.printMatrix([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15]])
