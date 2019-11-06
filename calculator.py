@@ -4,41 +4,30 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        stack_num = []
-        stack_sign = []
-        num = s
-        num = num.replace('+', ' ')
-        num = num.replace('-', ' ')
-        num = num.replace('*', ' ')
-        num = num.replace('/', ' ')
-        nums = num.split()
-        for n in nums:
-            stack_num.append(int(n))
-
-        for ch in s:
-            if ch == '*' or ch == '/' or ch == '+' or ch == '-':
-                stack_sign.append(ch)
-
-        cnt = 0
-        for i in range(0, len(stack_sign)):
-            if stack_sign[i] == '*':
-                stack_num[i + 1] = stack_num[i] * stack_num[i + 1]
-                stack_num[i] = -1
-                cnt += 1
-            elif stack_sign[i] == '/':
-                stack_num[i + 1] = stack_num[i] / stack_num[i + 1]
-                stack_num[i] = -1
-                cnt += 1
-
-        for i in range(0, len(stack_sign)):
-            if stack_sign[i] == '-':
-                j = i
-                while stack_num[j + 1] == -1:
-                    j += 1
-                stack_num[j + 1] *= -1
-        return sum(stack_num) + cnt
+        if not s:
+            return 0
+        stack, n, sign = [], 0, '+'
+        for i in xrange(len(s)):
+            if s[i].isdigit():
+                n = n * 10 + int(s[i])
+            if (not s[i].isdigit() and s[i] != ' ') or i == len(s) - 1:
+                if sign == '+':
+                    stack.append(n)
+                elif sign == '-':
+                    stack.append(-n)
+                elif sign == '*':
+                    stack.append(stack.pop() * n)
+                else:
+                    top = stack.pop()
+                    if top // n < 0 and top % n != 0:
+                        stack.append(top // n + 1)
+                    else:
+                        stack.append(top // n)
+                sign = s[i]
+                n = 0
+        return sum(stack)
 
 
 if __name__ == '__main__':
     solu = Solution()
-    print solu.calculate('14 - 3/2')
+    print solu.calculate('14-3/2')
